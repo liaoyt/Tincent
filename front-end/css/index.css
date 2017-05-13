@@ -1,0 +1,112 @@
+/* Normalize */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  min-width: 1020px;
+  max-height: 100%;
+  height: 100%;
+  word-wrap: break-word;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 14px;
+  line-height: 1.5;
+  color: #24292e;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.infor {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100%;
+  padding: 20px;
+  background: #FFF;
+  border-left: 1px solid #CCC;
+  z-index: 100;
+  overflow-y: scroll;
+  transform: translateX(100%) translateZ(0);
+  -webkit-transition: transform 500ms ease;
+  transition: transform 500ms ease;
+}
+.show {
+  -webkit-transform: translateX(0) translateZ(0);
+  transform: translateX(0) translateZ(0);
+}
+
+.infor .close-info {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 30px;
+  height: 30px;
+  background: #FFF;
+  border: 1px solid #CCC;
+  z-index: 100;
+  color: #BBB;
+  border-radius: 50%;
+  font-size: 30px;
+  line-height: 25px;
+  text-align: center;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+.infor .sub-title {
+  margin-top: 20px;
+  color: #555;
+}
+
+.infor .houses-list {
+  width: 100%;
+}
+.infor .houses-list:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.infor .houses-list .house {
+  float: left;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px 5px;
+  text-decoration: none;
+  transition: background 300ms ease;
+  border-bottom: 1px solid #EEE;
+}
+.infor .houses-list .house:hover {
+  background: rgba(0,0,0,.05);
+}
+
+.infor .houses-list .house .house-name {
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 30px;
+}
+
+.infor .houses-list .house .house-price {
+  color: #F45757;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 46px;
+}
+
+.map {
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
