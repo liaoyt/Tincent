@@ -1,7 +1,6 @@
 const config = {
   filterAPI: 'http://gay.edzh.me/api/filter'
 }
-const DEBUG = true
 
 // temp variable
 let map = null
@@ -10,17 +9,11 @@ let markers = []
 let polyline = null
 let houseMarkers = []
 
-// hook console
-;(function () {
-  if (!DEBUG) {
-    console.log = () => {}
-  }
-})()
 /**
  * init page
  * create map
  */
-function init() {
+;(function init() {
   map = new qq.maps.Map(document.getElementById('container'), {
     // 地图的中心地理坐标。
     center: new qq.maps.LatLng(22.540822, 113.934457),
@@ -37,7 +30,9 @@ function init() {
     }
 
     // close information bar
-    document.getElementById('infor').classList.remove('show')
+    const _DOM_INFOR_ = document.getElementById('infor')
+    _DOM_INFOR_.classList.remove('show')
+    _DOM_INFOR_.scrollTop = 0
 
     activeLine = e.target.value - 1
     const line = routes[activeLine]
@@ -53,7 +48,7 @@ function init() {
 
     renderLine(line)
   })
-}
+})()
 
 /**
  * draw path and point to map
@@ -187,6 +182,8 @@ function markHouseToMap (houses) {
     houseMarkers.forEach(v => v.setMap(null))
     houseMarkers = []
   }
+
+  document.getElementById('infor').scrollTop = 0
 
   // mark house to map
   houses.forEach(v => {
