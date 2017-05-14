@@ -3,14 +3,19 @@ const config = {
 }
 const DEBUG = true
 
+// temp variable
+let map = null
+let activeLine = 0
+let markers = []
+let polyline = null
+let houseMarkers = []
+
 // hook console
 ;(function () {
   if (!DEBUG) {
     console.log = () => {}
   }
 })()
-
-let map = null
 /**
  * init page
  * create map
@@ -19,14 +24,37 @@ function init() {
   map = new qq.maps.Map(document.getElementById('container'), {
     // 地图的中心地理坐标。
     center: new qq.maps.LatLng(22.540822, 113.934457),
-    zoom: 14
+    zoom: 12
   })
 
-  renderLine(routes[0])
+  renderLine(routes[activeLine])
+
+  document.getElementById('lineSelector').addEventListener('change', e => {
+    // clean now house on map
+    if (houseMarkers.length !== 0) {
+      houseMarkers.forEach(v => v.setMap(null))
+      houseMarkers = []
+    }
+
+    // close information bar
+    document.getElementById('infor').classList.remove('show')
+
+    activeLine = e.target.value - 1
+    const line = routes[activeLine]
+    const lineValues = document.getElementsByClassName('line-value')
+
+    lineValues[0].innerText = line.line
+    lineValues[1].innerText = line.startTime
+    lineValues[2].innerText = line.license
+    lineValues[3].innerText = line.driverName
+    lineValues[4].innerText = line.driverPhone
+    lineValues[5].innerText = line.route[0].station
+    lineValues[6].innerText = line.route[line.route.length - 1].station
+
+    renderLine(line)
+  })
 }
 
-let markers = []
-let polyline = null
 /**
  * draw path and point to map
  * @param {object} line
@@ -98,9 +126,19 @@ async function renderLine (line) {
 function markToMap (l, point) {
   console.log(`mark point: `, l)
   const E = new qq.maps.LatLng(l.lat, l.lng)
+
+  const ICON = new qq.maps.MarkerImage(
+    '/image/bus_station.png',
+    new qq.maps.Size(40, 40),
+    new qq.maps.Point(0, 0),
+    new qq.maps.Point(20, 40),
+    new qq.maps.Size(40, 40)
+  )
+
   const marker = new qq.maps.Marker({
     position: E,
-    map: map
+    map: map,
+    icon: ICON
   })
 
   qq.maps.event.addListener(marker, 'click', function () {
@@ -132,6 +170,7 @@ async function resource (l, point) {
 
     if (res.status === 200 && res.data.code === 88) {
       renderResource(point, res.data.data)
+      markHouseToMap(res.data.data)
     } else {
       console.error(e)
       alert(`请求数据发生错误。\n${e.message}\n${res.data.message}`)
@@ -140,6 +179,51 @@ async function resource (l, point) {
     console.error(e)
     alert(`请求数据发生错误。\n${e.message}`)
   }
+}
+
+function markHouseToMap (houses) {
+  // clean now house on map
+  if (houseMarkers.length !== 0) {
+    houseMarkers.forEach(v => v.setMap(null))
+    houseMarkers = []
+  }
+
+  // mark house to map
+  houses.forEach(v => {
+    const ICON = new qq.maps.MarkerImage(
+      '/image/house.png',
+      new qq.maps.Size(32, 32),
+      new qq.maps.Point(0, 0),
+      new qq.maps.Point(16, 32),
+      new qq.maps.Size(32, 32)
+    )
+
+    const marker = new qq.maps.Marker({
+      position: new qq.maps.LatLng(v.lat, v.lon),
+      map: map,
+      animation: qq.maps.MarkerAnimation.DOWN,
+      icon: ICON
+    })
+
+    // hook click event to highlight item
+    qq.maps.event.addListener(marker, 'click', function (e) {
+      // get house DOM NODE
+      const curHouse = document.getElementById(`id-${v.id}`)
+
+      // scroll to item
+      document.getElementById('infor').scrollTop = curHouse.offsetTop - 20
+
+      // add highlight
+      curHouse.classList.add('highlight')
+
+      // remove highlight
+      setTimeout(() => {
+        curHouse.classList.remove('highlight')
+      }, 1000)
+    })
+
+    houseMarkers.push(marker)
+  })
 }
 
 /**
@@ -154,14 +238,15 @@ function renderResource (station, resources) {
     return h('a', {
       href: c.url,
       target: 'blank',
-      class: 'house'
+      class: 'house',
+      id: `id-${c.id}`
     }, [
       h('p', {
         class: 'house-name'
       }, c.name),
       h('p', {
         class: 'house-price'
-      }, c.price)
+      }, `￥${c.price} /月`)
     ])
   })
 

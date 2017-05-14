@@ -22,6 +22,45 @@ body {
   overflow: hidden;
 }
 
+.header {
+  position: fixed;
+  top: 30px;
+  left: 80px;
+  width: 400px;
+  padding: 20px;
+  background: #FFF;
+  box-shadow: 0 3px 8px rgba(0,0,0,.3);
+  border: 1px solid #CCC;
+  border-radius: 4px;
+  z-index: 100;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.header .lable {
+  width: 15%;
+  font-weight: bold;
+}
+.header #lineSelector {
+  width: 85%;
+}
+.header .line-info {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 14px;
+  line-height: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.header .line-info .line-lable {
+  width: 22%;
+  font-weight: bold;
+}
+.header .line-info .line-value {
+  width: 78%;
+}
+
 .infor {
   position: fixed;
   top: 0;
@@ -78,7 +117,6 @@ body {
 .infor .houses-list .house {
   float: left;
   width: 100%;
-  margin: 10px 0;
   padding: 10px 5px;
   text-decoration: none;
   transition: background 300ms ease;
@@ -86,6 +124,9 @@ body {
 }
 .infor .houses-list .house:hover {
   background: rgba(0,0,0,.05);
+}
+.infor .houses-list .highlight {
+  animation: highlight 1s linear forwards;
 }
 
 .infor .houses-list .house .house-name {
@@ -109,4 +150,26 @@ body {
   width: 100%;
   height: 100%;
   z-index: 1;
+}
+
+@keyframes highlight {
+  0% {
+    background: rgba(255,255,255,1);
+  }
+
+  25% {
+    background: rgba(255,0,0,.2);
+  }
+
+  50% {
+    background: rgba(255,255,255,1);
+  }
+
+  75% {
+    background: rgba(255,0,0,.2);
+  }
+
+  100% {
+    background: rgba(255,255,255,1);
+  }
 }
