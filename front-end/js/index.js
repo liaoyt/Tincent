@@ -1,5 +1,5 @@
 const config = {
-  filterAPI: 'http://gay.edzh.me/api/filter'
+  filterAPI: 'http://tincent.edzh.me/api/filter'
 }
 
 // temp variable
@@ -17,7 +17,7 @@ let houseMarkers = []
   map = new qq.maps.Map(document.getElementById('container'), {
     // 地图的中心地理坐标。
     center: new qq.maps.LatLng(22.540822, 113.934457),
-    zoom: 12
+    zoom: 14
   })
 
   renderLine(routes[activeLine])
